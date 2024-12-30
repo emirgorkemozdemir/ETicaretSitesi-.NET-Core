@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EntityLayer;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer
 {
@@ -57,6 +58,81 @@ namespace DataAccessLayer
                 return context.Users.Find(id);
             }
         }
+
+        public bool PasswordChange(int userid, string oldpassword, string newpassword)
+        {
+            using (EticaretDb2Context context = new EticaretDb2Context())
+            {
+                var user = context.Users.Find(userid);
+
+
+                if (user == null)
+                {
+                    return false;
+                }
+                else if (user.Password != oldpassword)
+                {
+                    return false;
+                }
+                else
+                {
+                    user.Password = newpassword;
+                    context.SaveChanges();
+                    return true;
+                }
+
+
+
+            }
+        }
+
+        //public List<Product> FilterProducts(int? category,string? text,int? upperprice,int? lowerprice)
+        //{
+        //    using (EticaretDb2Context context = new EticaretDb2Context())
+        //    {
+        //        //if (category == null && text != null && price != null)
+        //        //{
+        //        //    return context.Products.Where(p => p.Title.Contains(text) && p.Price <= price).ToList();
+
+        //        //}
+        //        //else if (category == null && text == null && price != null)
+        //        //{
+        //        //    return context.Products.Where(p=>p.Price <= price).ToList();
+        //        //}
+        //        //else if (category == null && text != null && price == null)
+        //        //{
+        //        //    return context.Products.Where(p => p.Title.Contains(text)).ToList();
+        //        //}
+        //        //else if (category != null && text == null && price == null)
+        //        //{
+        //        //    return context.Products.Where(p => p.Categoryid==category).ToList();
+        //        //}
+        //        //else
+        //        //{
+
+        //        //}
+
+        //        var query = context.Products.AsQueryable();
+
+        //        if (category != null)
+        //        {
+        //            query = query.Where(p => p.Categoryid == category);
+        //        }
+
+        //        if (text != null)
+        //        {
+        //            query = query.Where(p => p.Title.Contains(text));
+        //        }
+
+        //        if (price != null)
+        //        {
+        //            query = query.Where(p => p.Price <= price);
+        //        }
+
+        //        return query.ToList();
+        //    }
+        //}
+
     }
 }
 

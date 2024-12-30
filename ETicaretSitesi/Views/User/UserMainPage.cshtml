@@ -1,0 +1,33 @@
+﻿@using EntityLayer
+@model List<Product>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<form method="post" action="/User/UserMainPage">
+    <input type="text" name="filterUpperPrice" placeholder="Üst fiyatı giriniz" />
+    <input type="text" name="filterLowerPrice" placeholder="Alt fiyatı giriniz" />
+    <input type="text" name="filterText" placeholder="Arama kelimesi giriniz" />
+    <input type="text" name="filterCategory" placeholder="Kategori giriniz" />
+
+    @* <label>Artan Sırala</label>
+    <input type="radio" name="filterAsc" />
+
+    <label>Azalan Sırala</label>
+    <input type="radio" name="filterDesc" /> *@
+
+    <select name="sıralama">
+        <option>Fiyata Göre Artan Sırala</option>
+        <option>Fiyata Göre Azalan Sırala</option>
+    </select>
+
+    <input type="submit" value="Filtrele" />
+</form>
+
+@{
+ 
+    foreach (var product in Model)
+    {
+        <div>@product.Title</div>
+    }
+}

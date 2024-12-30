@@ -11,6 +11,7 @@ namespace BusinessLayer
     public class UserBL
     {
         UserDAL dataaccess = new UserDAL();
+    
         public void AddBl(User kullanıcı)
         {
             dataaccess.Add(kullanıcı);
@@ -42,5 +43,19 @@ namespace BusinessLayer
         {
            return dataaccess.MyProfile(id);
         }
+
+        public bool UpdatePassword(int userid, string oldpassword, string newpassword, string newpassword2)
+        {
+            if (newpassword == newpassword2)
+            {
+                return dataaccess.PasswordChange(userid, oldpassword, newpassword);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
     }
 }

@@ -1,0 +1,13 @@
+﻿@using EntityLayer
+@model List<Product>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@{
+    foreach (var item in Model)
+    {
+        <div>@item.Title</div>
+    }
+}
