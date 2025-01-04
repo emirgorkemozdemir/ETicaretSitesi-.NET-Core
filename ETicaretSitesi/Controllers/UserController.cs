@@ -406,6 +406,11 @@ namespace ETicaretSitesi.Controllers
         }
 
         // Ürün detaylarını gösteren bir sayfa oluşturun.
+        public IActionResult ProductDetail(int productid)
+        {
+            return View(product_manager.FindProductByID(productid));
+        }
+
 
     }
 }
