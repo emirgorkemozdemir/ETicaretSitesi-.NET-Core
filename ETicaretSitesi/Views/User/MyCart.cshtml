@@ -11,5 +11,6 @@
         <div>@item.product.Title</div>
         <div>Üründen sepette @item.quantity tane bulunmaktadır</div>
         <a href="@Url.Action("DeleteFromCart","User", new {productid=item.product.ProductId})">Ürünü Sil</a>
+        <a href="@Url.Action("AddToCart","User", new {productid=item.product.ProductId})">Üründen Bir Tane Daha Ekle</a>
     }
 }

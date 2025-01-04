@@ -87,7 +87,7 @@ namespace ETicaretSitesi.Controllers
             return View(user_manager.MyProfile(id));
         }
 
-        public IActionResult AddToCart(int productid = 1)
+        public IActionResult AddToCart(int productid)
         {
             int userid = -1;
             if (HttpContext.Session.GetInt32("LoggedUserID") == null)
@@ -404,6 +404,8 @@ namespace ETicaretSitesi.Controllers
             ViewBag.category = LoadCategories();
             return View(result);
         }
+
+        // Ürün detaylarını gösteren bir sayfa oluşturun.
 
     }
 }
