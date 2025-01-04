@@ -67,5 +67,15 @@ namespace DataAccessLayer
                 return context.Products.Take(50).ToList();
             }
         }
+
+        public List<Category> ListCategories()
+        {
+            using (EticaretDb2Context context = new EticaretDb2Context())
+            {
+                var list = context.Categories.ToList();
+                return list;
+            }
+        }
+
     }
 }

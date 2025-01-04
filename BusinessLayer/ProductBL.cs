@@ -25,5 +25,10 @@ namespace BusinessLayer
         {
             return data_access.GetProductsByPrice(orderProduct,category,text,upperprice,lowerprice);
         }
+
+        public List<Category> GetCategories()
+        {
+            return data_access.ListCategories();
+        }
     }
 }
