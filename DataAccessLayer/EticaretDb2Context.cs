@@ -76,9 +76,7 @@ public partial class EticaretDb2Context : DbContext
         {
             entity.ToTable("Seller");
 
-            entity.Property(e => e.SellerId)
-                .ValueGeneratedNever()
-                .HasColumnName("SellerID");
+            entity.Property(e => e.SellerId).HasColumnName("SellerID");
             entity.Property(e => e.Description).HasMaxLength(50);
             entity.Property(e => e.Phone).HasMaxLength(15);
             entity.Property(e => e.TaxNo).HasMaxLength(13);

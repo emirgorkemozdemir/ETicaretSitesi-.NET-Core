@@ -12,6 +12,7 @@ public partial class Seller
     public string TaxNo { get; set; } = null!;
 
     public string Phone { get; set; } = null!;
+    public string Password { get; set; } = null!;
 
     public string Description { get; set; } = null!;
 }

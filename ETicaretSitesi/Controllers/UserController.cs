@@ -182,6 +182,12 @@ namespace ETicaretSitesi.Controllers
 
                     }
                 }
+                int toplamfiyat = 0;
+                foreach (var urun in urunlistesi)
+                {
+                    toplamfiyat += urun.product.Price;
+                }
+                ViewBag.total = toplamfiyat;
                 return View(urunlistesi);
             }
             else
@@ -191,6 +197,22 @@ namespace ETicaretSitesi.Controllers
 
 
         }
+
+
+        // Clear cart metodunu yaz.
+        public IActionResult ClearCart()
+        {
+            string öncekisepet = HttpContext.Request.Cookies["sepetim"];
+            string kullanıcı = öncekisepet.Split(":")[0];
+            CookieOptions cookieOptions = new CookieOptions();
+            cookieOptions.Expires = DateTime.Now.AddMonths(1);
+            cookieOptions.Secure = true;
+            cookieOptions.IsEssential = true;
+            cookieOptions.Path = "/";
+            HttpContext.Response.Cookies.Append("sepetim", $"{kullanıcı}:", cookieOptions);
+            return RedirectToAction("MyCart");
+        }   
+
 
         [HttpGet]
         public IActionResult PasswordChange()

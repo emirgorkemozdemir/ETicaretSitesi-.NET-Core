@@ -30,5 +30,10 @@ namespace BusinessLayer
         {
             return data_access.ListCategories();
         }
+
+        public void AddProduct(Product input)
+        {
+            data_access.AddProduct(input);
+        }
     }
 }

@@ -13,4 +13,16 @@
         <a href="@Url.Action("DeleteFromCart","User", new {productid=item.product.ProductId})">Ürünü Sil</a>
         <a href="@Url.Action("AddToCart","User", new {productid=item.product.ProductId})">Üründen Bir Tane Daha Ekle</a>
     }
+
+    <div>
+        Toplam Fiyat: @ViewBag.total
+    </div>
+
+    <div>
+<a href="@Url.Action("ClearCart","User")">Sepeti Temizle</a>
+    </div>
+
+    <div>
+<a href="#">Siparişi Tamamla</a>
+    </div>
 }

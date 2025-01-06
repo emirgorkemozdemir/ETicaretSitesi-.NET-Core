@@ -77,5 +77,14 @@ namespace DataAccessLayer
             }
         }
 
+        public void AddProduct(Product input)
+        {
+            using (EticaretDb2Context context = new EticaretDb2Context())
+            {
+                context.Products.Add(input);
+                context.SaveChanges();
+            }
+        }
+
     }
 }
