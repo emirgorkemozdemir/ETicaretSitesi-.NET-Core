@@ -79,16 +79,31 @@ namespace ETicaretSitesi.Controllers
         [HttpGet]
         public IActionResult AddProduct()
         {
-            ViewBag.categori = GetCategory();
-            return View();
+            if (HttpContext.Session.GetString("IsSellerOnline")=="true")
+            {
+				ViewBag.categori = GetCategory();
+				return View();
+			}
+            else
+            {
+                return RedirectToAction("LoginSeller");
+            }
+          
         }
         [HttpPost]
         public IActionResult AddProduct(Product input)
         {
-            input.Sellerid = Convert.ToInt32(HttpContext.Session.GetInt32("LoggedSellerID"));
-            ViewBag.categori = GetCategory();
-            product_manager.AddProduct(input);
-            return View();
+			if (HttpContext.Session.GetString("IsSellerOnline") == "true")
+			{
+				input.Sellerid = Convert.ToInt32(HttpContext.Session.GetInt32("LoggedSellerID"));
+				ViewBag.categori = GetCategory();
+				product_manager.AddProduct(input);
+				return View();
+			}
+			else
+			{
+				return RedirectToAction("LoginSeller");
+			}	
         }
     }
 }

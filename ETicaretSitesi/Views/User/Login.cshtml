@@ -10,6 +10,8 @@
 @using(Html.BeginForm("Login","User",FormMethod.Post))
 {
     @Html.TextBoxFor(m=>m.UserName)
+
     @Html.PasswordFor(m=>m.Password)
+
     <input type="submit" value="Giriş Yap" />
 }

@@ -51,40 +51,56 @@ namespace ETicaretSitesi.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(User kullanıcı)
         {
-            string hashed_pass = SHA256Converter.ComputeSha256Hash(kullanıcı.Password);
-            bool result = user_manager.Login(kullanıcı.UserName, hashed_pass);
-            if (result == true)
+            if (kullanıcı.UserName==null || kullanıcı.Password == null)
             {
-                int userid = user_manager.FindUserIDByUserName(kullanıcı.UserName);
-                HttpContext.Session.SetInt32("LoggedUserID", userid);
-                HttpContext.Session.SetString("LoggedUserOnline", "true");
-
-                // Kullanıcı giriş yaptıgında sepetim diye bir cookie ekilyoruz.
-                // Cookie var mı diye kontrol ettik. Aşagıda önce cookie'yi seçtik.
-                // Sonrasında equals ile seçilen deger boş mu diye baktık.
-
-                var sepetimvarmı = HttpContext.Request.Cookies.Where(c => c.Key == "sepetim").FirstOrDefault();
-                if (sepetimvarmı.Equals(new KeyValuePair<string, string>()))
-                {
-                    CookieOptions cookieOptions = new CookieOptions();
-                    cookieOptions.Expires = DateTime.Now.AddMonths(1);
-                    cookieOptions.Secure = true;
-                    cookieOptions.IsEssential = true;
-                    cookieOptions.Path = "/";
-                    HttpContext.Response.Cookies.Append("sepetim", $"{userid}:", cookieOptions);
-                }
-                return RedirectToAction("UserMainPage");
+                ViewBag.errmsg = "Kullanıcı adı veya şifre boş girilemez";
+                return View();
             }
             else
             {
-                ViewBag.errmsg = "Kullanıcı adı veya şifre hatalı";
-                return View();
+                string hashed_pass = SHA256Converter.ComputeSha256Hash(kullanıcı.Password);
+                bool result = user_manager.Login(kullanıcı.UserName, hashed_pass);
+                if (result == true)
+                {
+                    int userid = user_manager.FindUserIDByUserName(kullanıcı.UserName);
+                    HttpContext.Session.SetInt32("LoggedUserID", userid);
+                    HttpContext.Session.SetString("LoggedUserOnline", "true");
+
+                    // Kullanıcı giriş yaptıgında sepetim diye bir cookie ekilyoruz.
+                    // Cookie var mı diye kontrol ettik. Aşagıda önce cookie'yi seçtik.
+                    // Sonrasında equals ile seçilen deger boş mu diye baktık.
+
+                    var sepetimvarmı = HttpContext.Request.Cookies.Where(c => c.Key == "sepetim").FirstOrDefault();
+                    if (sepetimvarmı.Equals(new KeyValuePair<string, string>()))
+                    {
+                        CookieOptions cookieOptions = new CookieOptions();
+                        cookieOptions.Expires = DateTime.Now.AddMonths(1);
+                        cookieOptions.Secure = true;
+                        cookieOptions.IsEssential = true;
+                        cookieOptions.Path = "/";
+                        HttpContext.Response.Cookies.Append("sepetim", $"{userid}:", cookieOptions);
+                    }
+                    return RedirectToAction("UserMainPage");
+                }
+                else
+                {
+                    ViewBag.errmsg = "Kullanıcı adı veya şifre hatalı";
+                    return View();
+                }
             }
         }
         public IActionResult MyProfile()
         {
-            int id = Convert.ToInt32(HttpContext.Session.GetInt32("LoggedUserID"));
-            return View(user_manager.MyProfile(id));
+            if (HttpContext.Session.GetString("LoggedUserOnline")=="true")
+            {
+				int id = Convert.ToInt32(HttpContext.Session.GetInt32("LoggedUserID"));
+				return View(user_manager.MyProfile(id));
+			}
+            else
+            {
+                return RedirectToAction("Login");
+            }
+           
         }
 
         public IActionResult AddToCart(int productid)
@@ -217,24 +233,47 @@ namespace ETicaretSitesi.Controllers
         [HttpGet]
         public IActionResult PasswordChange()
         {
-            return View();
+			if (HttpContext.Session.GetString("LoggedUserOnline") == "true")
+			{
+				return View();
+			}
+			else
+			{
+				return RedirectToAction("Login");
+			}
+			
         }
 
         [HttpPost]
         public IActionResult PasswordChange(string oldpassword, string newpassword, string newpassword2)
         {
-            int userid = Convert.ToInt32(HttpContext.Session.GetInt32("LoggedUserID"));
-            string hashed_old_pass = SHA256Converter.ComputeSha256Hash(oldpassword);
-            string hashed_new_pass_1 = SHA256Converter.ComputeSha256Hash(newpassword);
-            string hashed_new_pass_2 = SHA256Converter.ComputeSha256Hash(newpassword2);
-            bool result = user_manager.UpdatePassword(userid, hashed_old_pass, hashed_new_pass_1, hashed_new_pass_2);
-            if (result == true)
+            if (oldpassword==null || newpassword == null || newpassword2 == null)
             {
+                ViewBag.errmsg = "Şifrelerin hiçbiri boş girilemez";
                 return View();
             }
             else
             {
-                return RedirectToAction("usermainpage");
+                if (HttpContext.Session.GetString("LoggedUserOnline") == "true")
+                {
+                    int userid = Convert.ToInt32(HttpContext.Session.GetInt32("LoggedUserID"));
+                    string hashed_old_pass = SHA256Converter.ComputeSha256Hash(oldpassword);
+                    string hashed_new_pass_1 = SHA256Converter.ComputeSha256Hash(newpassword);
+                    string hashed_new_pass_2 = SHA256Converter.ComputeSha256Hash(newpassword2);
+                    bool result = user_manager.UpdatePassword(userid, hashed_old_pass, hashed_new_pass_1, hashed_new_pass_2);
+                    if (result == true)
+                    {
+                        return View();
+                    }
+                    else
+                    {
+                        return RedirectToAction("usermainpage");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Login");
+                }
             }
         }
 
