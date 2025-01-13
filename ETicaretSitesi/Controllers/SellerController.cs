@@ -105,5 +105,47 @@ namespace ETicaretSitesi.Controllers
 				return RedirectToAction("LoginSeller");
 			}	
         }
+
+     
+
+        [HttpGet]
+        public IActionResult ListProduct()
+        {
+            if (HttpContext.Session.GetString("IsSellerOnline") == "true")
+            {
+                var result = product_manager.FindProductBySellerID(Convert.ToInt32(HttpContext.Session.GetInt32("LoggedSellerID")));
+
+                return View(result);
+            }
+            else
+            {
+                return RedirectToAction("LoginSeller");
+            }
+        }
+
+        [HttpGet]
+        public IActionResult DeleteProduct(int urunid)
+        {
+            product_manager.DeleteProduct(urunid);
+            return RedirectToAction("ListProduct");
+        }
+
+        [HttpGet]
+        public IActionResult UpdateProduct(int urunid) 
+        {
+			ViewBag.categori = GetCategory();
+			var selected_product = product_manager.FindProductByID(urunid);
+            return View(selected_product);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateProduct(Product updating_product)
+        {
+			ViewBag.categori = GetCategory();
+            updating_product.AddDate = DateTime.Now;
+            updating_product.Sellerid = Convert.ToInt32(HttpContext.Session.GetInt32("LoggedSellerID"));
+            product_manager.UpdateProduct(updating_product);
+			return View();
+        }
     }
 }

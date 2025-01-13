@@ -86,5 +86,24 @@ namespace DataAccessLayer
             }
         }
 
+        public void DeleteProduct(int id)
+        {
+            using (EticaretDb2Context context = new EticaretDb2Context())
+            {
+                var selected_product = context.Products.Find(id);
+                context.Products.Remove(selected_product);
+                context.SaveChanges();
+            }
+        }
+
+        public void UpdateProduct(Product updating_product)
+        {
+			using (EticaretDb2Context context = new EticaretDb2Context())
+			{
+				context.Products.Update(updating_product);
+				context.SaveChanges();
+			}
+		}
+
     }
 }

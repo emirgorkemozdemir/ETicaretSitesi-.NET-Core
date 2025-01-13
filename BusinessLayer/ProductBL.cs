@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BusinessLayer
 {
@@ -35,5 +36,22 @@ namespace BusinessLayer
         {
             data_access.AddProduct(input);
         }
-    }
+
+        public List<Product> FindProductBySellerID(int id)
+        {
+            var all_products = data_access.GetAllProducts();
+            var newlist = all_products.Where(p => p.Sellerid == id).ToList();
+            return newlist;
+        }
+
+        public void DeleteProduct(int id)
+        {
+            data_access.DeleteProduct(id);
+        }
+
+		public void UpdateProduct(Product updating_product)
+		{
+            data_access.UpdateProduct(updating_product);
+		}
+	}
 }
